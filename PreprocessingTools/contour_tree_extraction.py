@@ -32,11 +32,11 @@ def parse_args():
     args.volume_file_path = json_content['volumes']['file_path']
     args.volume_file_names = json_content['volumes']['file_names']
 
-    args.persistence_threshold_low = json_content['input_parameters']['persistence_threshold_low']
-    args.persistence_threshold_high = json_content['input_parameters']['persistence_threshold_high']
+    args.persistence_threshold_low = json_content['contour_trees']['persistence_threshold_low']
+    args.persistence_threshold_high = json_content['contour_trees']['persistence_threshold_high']
     args.data_byte_order = json_content['volumes']['data_byte_order']
 
-    args.obj_path = json_content['output_parameters']['obj_path']
+    args.obj_path = json_content['contour_trees']['obj_path']
     if args.obj_path[-1] == '/' or args.obj_path[-1] == '\\':
         args.obj_path = args.obj_path[:-1]
     args.obj_path = args.obj_path + '_p_' + str(args.persistence_threshold_low) + '/'
@@ -70,6 +70,4 @@ if __name__ == "__main__":
         print("The contour tree has been saved in {}".format(obj_name))
         print("Time : {:.2f}s".format(end_time-start_time))
         time.sleep(2)
-        
 
-        
