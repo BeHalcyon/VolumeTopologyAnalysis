@@ -121,7 +121,7 @@ def obj2Graph(nodes, edges, volume, volume_sample_ratio, histogram_size):
             G.node[idx][j] = distribution[j]
         idx += 1
     for s, t in edges:
-        G.add_edge(s, t)
+        G.add_edge(s-1, t-1)
     return G
 
 if __name__ == '__main__':
