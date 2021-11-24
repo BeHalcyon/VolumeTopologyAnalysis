@@ -57,17 +57,19 @@ def getGlobalRange(file_names, dtype):
 
     return [min_value, max_value]
 
-def regularizationVolume(origin_variable_name, origin_dtype, global_range):
-    origin_volume = np.fromfile(origin_variable_name, origin_dtype)
+def regularizationVolume(generated_path, origin_variable_name, origin_dtype, global_range):
+
     new_variable_name = origin_variable_name.split('.')[0]+'_char.raw'
+    new_variable_name = os.path.join(generated_path, new_variable_name.split("\\")[-1])
+    origin_volume = np.fromfile(origin_variable_name, origin_dtype)
     new_volume = normalizeVolume(origin_volume, 256, 'uint8')
     # new_volume = np.array((origin_volume - global_range[0])/(global_range[1] - global_range[0])*255, dtype=np.uint8)
     new_volume.tofile(new_variable_name)
 
-def regularizationVolumes(origin_variable_names, origin_dtype, global_rage):
+def regularizationVolumes(generated_path, origin_variable_names, origin_dtype, global_range):
     index = 0
     for name in origin_variable_names:
-        regularizationVolume(name, origin_dtype, global_rage)
+        regularizationVolume(generated_path, name, origin_dtype, global_range)
         if index % 10 == 0:
             print('Process for regularization of volume: {}'.format(name))
         index += 1
@@ -82,8 +84,10 @@ def main():
 
     for variable_name in variable_names:
         variable_files = listFiles(directory, variable_name)
+        generated_directory = os.path.join(directory, variable_name)
+        create_dir_not_exist(generated_directory)
         ranges = getGlobalRange(variable_files, 'float32')
-        regularizationVolumes(variable_files, 'float32', ranges)
+        regularizationVolumes(generated_directory, variable_files, 'float32', ranges)
 
 
 if __name__ == '__main__':
